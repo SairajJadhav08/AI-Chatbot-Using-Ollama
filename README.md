@@ -388,12 +388,12 @@ ollama list
 
 1. Download the model:
    ```bash
-   ollama pull <model-name>
+   ollama pull llama3
    ```
 
 2. Update `.env`:
    ```env
-   OLLAMA_MODEL=<model-name>
+   OLLAMA_MODEL=llama3
    ```
 
 3. Restart backend server
