@@ -186,17 +186,33 @@ Click any chip to instantly send that message!
 ## 📸 Screenshots
 
 ### Main Interface
-- Elegant gradient header with "Mike - AI Assistant"
-- Clean chat bubbles (user messages on right, assistant on left)
-- Smooth animations and hover effects
+
+![Mike AI Chatbot Interface](UI%20image.png)
+
+**Features shown:**
+- ✨ Elegant gradient header with "Mike - AI Assistant"
+- 💬 Clean chat bubbles (user messages on right, assistant on left)
+- 🎨 Smooth animations and hover effects
+- 📜 ChatGPT-style sidebar with History and Settings tabs
+- 🔘 Interactive suggestion chips at conversation start
+- 📱 Fully responsive design
 
 ### Sidebar Features
-- **History Panel**: All your conversations organized by date
-- **Settings Panel**: Customize Mike's personality and response style
+
+**History Panel:**
+- View all your conversations organized by date
+- Quick access to previous chats
+- Delete conversations with one click
+
+**Settings Panel:**
+- Customize Mike's personality and response style
+- Set custom instructions for personalized interactions
+- Settings persist across sessions
 
 ### Responsive Design
 - Works beautifully on all screen sizes
 - Mobile-friendly touch interactions
+- Adaptive layout for tablets and phones
 
 ---
 
