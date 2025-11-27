@@ -204,56 +204,67 @@ Click any chip to instantly send that message!
 
 ### System Overview
 
+```mermaid
+graph TB
+    A[Frontend<br/>index.html<br/>Bootstrap UI] -->|HTTP POST /chat<br/>with history + custom instructions| B[Backend<br/>app.py<br/>FastAPI]
+    B -->|HTTP POST /api/chat<br/>formatted conversation| C[Ollama Server<br/>localhost:11434<br/>Llama 3 Model]
+    C -->|Streaming JSON<br/>text chunks| B
+    B -->|Server-Sent Events<br/>SSE stream| A
+    A -->|Real-time UI Updates<br/>JavaScript| D[User sees<br/>streaming response]
+    
+    style A fill:#6C63FF,stroke:#4D96FF,stroke-width:2px,color:#fff
+    style B fill:#00E5FF,stroke:#4D96FF,stroke-width:2px,color:#000
+    style C fill:#FF6B6B,stroke:#FF5252,stroke-width:2px,color:#fff
+    style D fill:#51CF66,stroke:#40C057,stroke-width:2px,color:#fff
 ```
-┌─────────────────┐
-│   Frontend      │
-│  (index.html)   │
-│   Bootstrap UI  │
-└────────┬────────┘
-         │ HTTP POST /chat
-         │ (with history + custom instructions)
-         ▼
-┌─────────────────┐
-│    Backend      │
-│   (app.py)      │
-│   FastAPI       │
-└────────┬────────┘
-         │ HTTP POST /api/chat
-         │ (formatted conversation)
-         ▼
-┌─────────────────┐
-│  Ollama Server  │
-│ localhost:11434 │
-│   Llama 3 Model │
-└────────┬────────┘
-         │ Streaming JSON
-         │ (text chunks)
-         ▼
-┌─────────────────┐
-│    Backend      │
-│  (SSE Format)   │
-└────────┬────────┘
-         │ Server-Sent Events
-         │ (real-time stream)
-         ▼
-┌─────────────────┐
-│   Frontend      │
-│  (JavaScript)   │
-│  Real-time UI   │
-└─────────────────┘
+
+### Detailed Component Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend as Frontend<br/>(index.html)
+    participant Backend as Backend<br/>(app.py)
+    participant Ollama as Ollama Server<br/>(Llama 3)
+    
+    User->>Frontend: Types message & clicks Send
+    Frontend->>Frontend: Add message to UI<br/>Show typing indicator
+    Frontend->>Backend: POST /chat<br/>{message, history, custom_instructions}
+    Backend->>Backend: Format conversation<br/>with system prompt
+    Backend->>Ollama: POST /api/chat<br/>{messages, stream: true}
+    
+    loop Streaming Response
+        Ollama-->>Backend: JSON chunk<br/>{content: "text"}
+        Backend-->>Frontend: SSE event<br/>data: {content: "text"}
+        Frontend->>Frontend: Update UI<br/>Append text to bubble
+        Frontend->>User: Display streaming text
+    end
+    
+    Ollama-->>Backend: {done: true}
+    Backend-->>Frontend: SSE event<br/>data: {done: true}
+    Frontend->>Frontend: Hide typing indicator<br/>Save conversation
+    Frontend->>User: Complete response displayed
 ```
 
 ### Project Structure
 
-```
-AI-Chatbot-Using-Ollama/
-├── app.py                 # FastAPI backend application
-├── ollama_client.py       # Ollama API communication module
-├── index.html             # Frontend UI (Bootstrap + JavaScript)
-├── requirements.txt       # Python dependencies
-├── .env.example          # Environment variables template
-├── README.md              # This file
-└── .gitignore            # Git ignore rules
+```mermaid
+graph TD
+    A[AI-Chatbot-Using-Ollama/] --> B[app.py<br/>FastAPI Backend]
+    A --> C[ollama_client.py<br/>Ollama Integration]
+    A --> D[index.html<br/>Frontend UI]
+    A --> E[requirements.txt<br/>Dependencies]
+    A --> F[.env.example<br/>Config Template]
+    A --> G[README.md<br/>Documentation]
+    A --> H[.gitignore<br/>Git Rules]
+    
+    style B fill:#00E5FF,stroke:#4D96FF,stroke-width:2px
+    style C fill:#00E5FF,stroke:#4D96FF,stroke-width:2px
+    style D fill:#6C63FF,stroke:#4D96FF,stroke-width:2px,color:#fff
+    style E fill:#FFD93D,stroke:#FFC107,stroke-width:2px
+    style F fill:#FFD93D,stroke:#FFC107,stroke-width:2px
+    style G fill:#51CF66,stroke:#40C057,stroke-width:2px
+    style H fill:#868E96,stroke:#495057,stroke-width:2px,color:#fff
 ```
 
 ### Key Components
